@@ -1,0 +1,13 @@
+{
+  "name": "meanblog",
+  "version": "0.0.1",
+  "dependencies": {
+    "mongoose": "^3.8.8",
+    "express": "^3.5.1"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.4",
+    "karma": "^0.12.4",
+    "nodeunit": "^0.8.6"
+  }
+}
