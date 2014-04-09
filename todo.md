@@ -27,8 +27,12 @@ As a goal, this application will provide basic blogging functionality using the 
 ##User stories
 
 These are discrete goals that an end-user would recognize as a new feature or update. 
- * Set up delivery of static assets (JS/CSS/images)
- - Using pre-populated sample data, render a blog home page with x number of posts 
+ * Using pre-populated sample data, render a blog home page with x number of posts
+ 	- Define data structure for the blog posts 
+ 	- Create sample data
+ 	- Set up back end REST API to deliver mongodb data to the front end 
+ 	- Get angular to read the data
+ 	- Use angular to populate a front page
  - Set up a user and permissions system to log into a backend
  - Allow accessing a backend to create new posts
  - Allow backend access to see older posts and edit them
@@ -36,8 +40,6 @@ These are discrete goals that an end-user would recognize as a new feature or up
  
 ##Programming tasks
 
-These are discrete programming tasks related to the current user story. 
- - Set a view engine in express
- - Render an index.html view
+ - Set up and test a connection to the local 'meanblog' database
  
-
+##Blog post data structure
