@@ -27,8 +27,7 @@ As a goal, this application will provide basic blogging functionality using the 
 ##User stories
 
 These are discrete goals that an end-user would recognize as a new feature or update. 
- * Create a working server that renders an index view
- - Set up delivery of static assets (JS/CSS/images)
+ * Set up delivery of static assets (JS/CSS/images)
  - Using pre-populated sample data, render a blog home page with x number of posts 
  - Set up a user and permissions system to log into a backend
  - Allow accessing a backend to create new posts

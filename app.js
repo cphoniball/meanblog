@@ -25,6 +25,12 @@ app.locals({
 	url: app.get('url')
 }); 
 
+// static assets
+app.use('/css', express.static(__dirname + '/client/assets/css'));
+app.use('/js', express.static(__dirname + '/client/assets/js'));
+app.use('/img', express.static(__dirname + '/client/assets/img'));
+app.use('/packages', express.static(__dirname + '/packages'));
+
 app.get('/', function(req, res) {
 	res.render('index'); 
 }); 
