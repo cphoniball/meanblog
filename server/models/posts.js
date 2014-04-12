@@ -5,4 +5,4 @@ exports.createTestPostData = function() {
 
 };
 
-exports.postSchema = mongoose.
+exports.postSchema = mongoose.model(); 

@@ -28,9 +28,7 @@ As a goal, this application will provide basic blogging functionality using the 
 
 These are discrete goals that an end-user would recognize as a new feature or update. 
  * Using pre-populated sample data, render a blog home page with x number of posts
- 	- Define data structure for the blog posts 
- 	- Create sample data
- 	- Set up back end REST API to deliver mongodb data to the front end 
+ 	* Set up back end REST API to deliver mongodb data to the front end 
  	- Get angular to read the data
  	- Use angular to populate a front page
  - Set up a user and permissions system to log into a backend
