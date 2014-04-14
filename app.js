@@ -1,4 +1,5 @@
 var express = require('express'); // node js middleware
+var bodyParser = require('body-parser');
 var mongoose = require('mongoose'); // mongodb driver
 var program = require('commander'); // command line options and utils
 var handlebars = require('express3-handlebars');
@@ -11,6 +12,9 @@ app.set('PORT', '1337');
 app.set('URL', 'localhost:1337');
 app.set('DB_CONNECTION_URL', 'mongodb://localhost/meanblog');
 
+// application middleware
+app.use(bodyParser());
+
 // view engine/templating
 // using hbs
 app.engine('hbs', handlebars({ defaultLayout: __dirname + '/client/views/layouts/main.hbs' }));
@@ -20,10 +24,8 @@ app.set('view engine', 'hbs');
 app.set('views', __dirname + '/client/views');
 
 // make application settings available to templates
-app.locals({
-	meanName: app.get('NAME'),
-	url: app.get('URL')
-});
+app.locals.meanName = app.get('NAME');
+app.locals.url = app.get('URL');
 
 // static assets
 app.use('/css', express.static(__dirname + '/client/assets/css'));
@@ -54,21 +56,37 @@ db.once('open', function() {
 		res.render('index');
 	});
 
-	// Returns a list of post objects
-	app.get('/db/posts', function(req, res) {
-		Post.find(function(err, docs) {
-			if (err) return console.error(err);
-			res.send(docs);
-		});
+	// Returns a list of post objects or queries for single post, if query string is provided
+	app.get('/posts', function(req, res) {
+		if (req.query.length) { // if query string is provided
+			Post.find(req.query, function(err, docs) {
+				if (err) return console.error(err); 
+				res.send(docs); 
+			}); 
+		} else {
+			Post.find(function(err, docs) {
+				if (err) return console.error(err);
+				res.send(docs);
+			});	
+		}
 	});
 
 	// Create a single post object
-	app.post('/db/posts', function(req, res) {
+	app.post('/posts', function(req, res) {
 		var post = new Post({
 			title: req.body.title,
+			tags: req.body.tags,
+			content: req.body.content
+		});
 
+		post.save(function(err) {
+			if (err) return console.error(err);
+			res.send(post);
 		});
 	});
+
+	// Delete a single post object by ID
+	// app.delete(); 
 
 
 	app.listen(app.get('PORT'));

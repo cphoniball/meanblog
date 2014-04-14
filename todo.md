@@ -38,8 +38,7 @@ These are discrete goals that an end-user would recognize as a new feature or up
 
 ##Programming tasks
 
- - Update to express 4.x and set up the new middleware
- - Set up and test a connection to the local 'meanblog' database
+ * Test connection to local database
  - Might have to move away from express3-handlebars
 
 
