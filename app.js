@@ -58,7 +58,7 @@ db.once('open', function() {
 
 	// Returns a list of post objects or queries for single post, if query string is provided
 	app.get('/posts', function(req, res) {
-		if (req.query.length) { // if query string is provided
+		if (isNonEmptyObject(req.query)) { // if query string is provided
 			Post.find(req.query, function(err, docs) {
 				if (err) return console.error(err); 
 				res.send(docs); 
@@ -85,12 +85,33 @@ db.once('open', function() {
 		});
 	});
 
-	// Delete a single post object by ID
-	// app.delete(); 
+	// Delete a post by arbitrary JSON included in the body of the request
+	app.delete('/posts', function(req, res) {
+		if (!isNonEmptyObject(req.body)) {
+			console.error('No parameters passed to DELETE /posts'); 
+			res.status(500).send('Error'); 	
+		} else {
+			Post.find(req.body, function(err, docs) {
+				Post.remove(req.body, function(err) {
+					if (err) return console.error(err); 	
+					res.send(docs); 
+				}); 
+			});
+		}
+	}); 
 
+	// Delete a single post object by ID
+	app.delete('/posts/:id', function(req, res) {
+		Post.findByIdAndRemove(req.params.id, function(err, docs) {
+			if (err) return console.error(err); 
+			res.send(docs);
+		}); 
+	});
 
 	app.listen(app.get('PORT'));
-
 	console.log('Listening on port ' + app.get('PORT'));
 });
-
+ 
+function isNonEmptyObject(obj) {
+	return typeof(obj) === 'object' && obj !== {};
+}

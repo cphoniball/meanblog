@@ -35,10 +35,10 @@ These are discrete goals that an end-user would recognize as a new feature or up
  - Allow accessing a backend to create new posts
  - Allow backend access to see older posts and edit them
  - Allow backend access to delete old posts
+ - Create authentication system to manage database access
 
 ##Programming tasks
 
- * Test connection to local database
  - Might have to move away from express3-handlebars
 
 
