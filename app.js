@@ -85,18 +85,29 @@ db.once('open', function() {
 		});
 	});
 
+	// Update a post 
+	app.put('/posts', function(req, res) {
+		if (isNonEmptyObject(req.body)) {
+			Post.findOneAndUpdate(req.body.conditions, req.body.update, function(err, doc) {
+				if (err) return console.error(err); 
+				res.send(doc); 
+			}); 
+		} else {
+			res.status(500).send('No params passed to PUT /posts'); 
+		}
+	}); 
+
 	// Delete a post by arbitrary JSON included in the body of the request
 	app.delete('/posts', function(req, res) {
-		if (!isNonEmptyObject(req.body)) {
-			console.error('No parameters passed to DELETE /posts'); 
-			res.status(500).send('Error'); 	
-		} else {
+		if (isNonEmptyObject(req.body)) {
 			Post.find(req.body, function(err, docs) {
 				Post.remove(req.body, function(err) {
 					if (err) return console.error(err); 	
 					res.send(docs); 
 				}); 
 			});
+		} else {
+			res.status(500).send('No parameters passed to DELETE /posts'); 	
 		}
 	}); 
 

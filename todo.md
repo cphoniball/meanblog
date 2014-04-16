@@ -39,7 +39,8 @@ These are discrete goals that an end-user would recognize as a new feature or up
 
 ##Programming tasks
 
- - Might have to move away from express3-handlebars
+ - Create update post task 
+ - Figure out how to set a default URL for the posts OR figure out if we don't even need to save a URL with a post... can just query the DB based on URL and permalink settings later 
 
 
 ##Blog post data structure

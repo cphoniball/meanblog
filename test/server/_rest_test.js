@@ -48,6 +48,36 @@ exports.getWithQueryRetrievesPosts = function(test) {
 	}); 
 };
 
+exports.putUpdatesPosts = function(test) {
+	// create temp post 
+	request({
+		url: 'http://localhost:1337/posts', 
+		method: 'POST', 
+		json: {
+			title: 'Temp post', 
+			content: 'This is going to be deleted.'
+		}
+	}, function(err, res, body) {
+		if (err) return console.error(err); 
+		request({
+			url: 'http://localhost:1337/posts', 
+			method: 'PUT', 
+			json: {
+				conditions: {
+					title: 'Temp post'
+				},
+				update: {	
+					title: 'Update temp post' 
+				}
+			}
+		}, function(err, res, body) {
+			if (err) return console.error(err); 
+			test.equal(body.title, 'Update temp post', 'Updated post returns correct title.'); 
+			test.done(); 
+		}); 
+	}); 
+}; 
+
 exports.deleteRemovesPosts = function(test) {
 	// Create a post to be deleted
 	request({
