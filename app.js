@@ -33,96 +33,25 @@ app.use('/js', express.static(__dirname + '/client/assets/js'));
 app.use('/img', express.static(__dirname + '/client/assets/img'));
 app.use('/packages', express.static(__dirname + '/packages'));
 
+// basic view routing
+var views = require('./server/routes/views');
+app.get('/', views.index);
+
 // setting up DB connection
 mongoose.connect(app.get('DB_CONNECTION_URL'));
 var db = mongoose.connection;
-
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-	// create post schema
-	// TODO - separate this logic out into a separate module.. not sure how right now
-	var postSchema = mongoose.Schema({
-		title: String,
-		tags: [String],
-		created: { type: Date, default: Date.now },
-		lastUpdated: { type: Date, default: Date.now },
-		url: String, // need to figure out how to set URL here
-		content: String
-	});
-
-	var Post = mongoose.model('Post', postSchema);
-
-	app.get('/', function(req, res) {
-		res.render('index');
-	});
-
-	// Returns a list of post objects or queries for single post, if query string is provided
-	app.get('/posts', function(req, res) {
-		if (isNonEmptyObject(req.query)) { // if query string is provided
-			Post.find(req.query, function(err, docs) {
-				if (err) return console.error(err); 
-				res.send(docs); 
-			}); 
-		} else {
-			Post.find(function(err, docs) {
-				if (err) return console.error(err);
-				res.send(docs);
-			});	
-		}
-	});
-
-	// Create a single post object
-	app.post('/posts', function(req, res) {
-		var post = new Post({
-			title: req.body.title,
-			tags: req.body.tags,
-			content: req.body.content
-		});
-
-		post.save(function(err) {
-			if (err) return console.error(err);
-			res.send(post);
-		});
-	});
-
-	// Update a post 
-	app.put('/posts', function(req, res) {
-		if (isNonEmptyObject(req.body)) {
-			Post.findOneAndUpdate(req.body.conditions, req.body.update, function(err, doc) {
-				if (err) return console.error(err); 
-				res.send(doc); 
-			}); 
-		} else {
-			res.status(500).send('No params passed to PUT /posts'); 
-		}
-	}); 
-
-	// Delete a post by arbitrary JSON included in the body of the request
-	app.delete('/posts', function(req, res) {
-		if (isNonEmptyObject(req.body)) {
-			Post.find(req.body, function(err, docs) {
-				Post.remove(req.body, function(err) {
-					if (err) return console.error(err); 	
-					res.send(docs); 
-				}); 
-			});
-		} else {
-			res.status(500).send('No parameters passed to DELETE /posts'); 	
-		}
-	}); 
-
-	// Delete a single post object by ID
-	app.delete('/posts/:id', function(req, res) {
-		Post.findByIdAndRemove(req.params.id, function(err, docs) {
-			if (err) return console.error(err); 
-			res.send(docs);
-		}); 
-	});
-
-	app.listen(app.get('PORT'));
-	console.log('Listening on port ' + app.get('PORT'));
-});
  
-function isNonEmptyObject(obj) {
-	return typeof(obj) === 'object' && obj !== {};
-}
+var post = require('./server/models/posts'); 
+
+// REST api routing
+app.get('/posts', post.get);
+app.post('/posts', post.create);
+app.put('/posts', post.update); 
+app.delete('/posts', post.delete); 
+app.delete('/posts/:id', post.deleteById);
+
+app.listen(app.get('PORT'), function() {
+	console.log('listening on port ' + app.get('PORT')); 
+});	
+ 
