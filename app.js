@@ -1,8 +1,9 @@
 var express = require('express'); // node js middleware
 var bodyParser = require('body-parser');
+var cors = require('cors'); 
 var mongoose = require('mongoose'); // mongodb driver
 var program = require('commander'); // command line options and utils
-var handlebars = require('express3-handlebars');
+// var handlebars = require('express3-handlebars'); - I don't think I need this with express now 
 
 var app = express();
 
@@ -14,11 +15,10 @@ app.set('DB_CONNECTION_URL', 'mongodb://localhost/meanblog');
 
 // application middleware
 app.use(bodyParser());
+app.use(cors()); // enable all cross-domain requests
 
 // view engine/templating
-// using hbs
-app.engine('hbs', handlebars({ defaultLayout: __dirname + '/client/views/layouts/main.hbs' }));
-app.set('view engine', 'hbs');
+app.set('view engine', 'html');
 
 // application settings
 app.set('views', __dirname + '/client/views');
@@ -32,10 +32,12 @@ app.use('/css', express.static(__dirname + '/client/assets/css'));
 app.use('/js', express.static(__dirname + '/client/assets/js'));
 app.use('/img', express.static(__dirname + '/client/assets/img'));
 app.use('/packages', express.static(__dirname + '/packages'));
+app.use('/controllers', express.static(__dirname + '/client/controllers'));
 
 // basic view routing
-var views = require('./server/routes/views');
-app.get('/', views.index);
+app.get('/', function(req, res) {
+	res.sendfile(__dirname + '/client/views/index.html'); 
+});
 
 // setting up DB connection
 mongoose.connect(app.get('DB_CONNECTION_URL'));

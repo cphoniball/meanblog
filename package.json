@@ -7,7 +7,8 @@
     "express": "^4.0.0",
     "express3-handlebars": "^0.5.0",
     "mongoose": "^3.8.8",
-    "q": "^1.0.1"
+    "q": "^1.0.1",
+    "cors": "^2.2.0"
   },
   "devDependencies": {
     "grunt": "^0.4.4",
@@ -15,6 +16,7 @@
     "nodeunit": "^0.8.6",
     "request": "^2.34.0",
     "grunt-contrib-watch": "^0.6.1",
-    "grunt-contrib-nodeunit": "^0.3.3"
+    "grunt-contrib-nodeunit": "^0.3.3",
+    "grunt-contrib-sass": "^0.7.3"
   }
 }

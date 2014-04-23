@@ -1,18 +1,24 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>{{meanName}}</title>
+	<title>My Mean Blog</title>
 
 	<link rel="stylesheet" href="/packages/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/main.css">
 
 	<script src="/packages/angular/angular.min.js"></script>
 	<script src="/packages/angular-resource/angular-resource.min.js"></script>
 
 	<script src="/js/main.js"></script>
 </head>
-<body>
+<body ng-app="meanblog">
 
-	{{{body}}}
-	
+	<h2>Mean blog example</h2>
+
+	<div ng-controller="PostCtrl">
+		
+		{{posts}}
+
+	</div>
 </body>
 </html>
