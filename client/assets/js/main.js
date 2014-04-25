@@ -37,3 +37,9 @@ app.controller('PostCtrl', function($scope ,$resource) {
 	};
 	
 }); 
+
+app.directive('ehSimple', function() {
+	return function(scope, element) {
+		element.addClass('plain'); 
+	}
+}); 

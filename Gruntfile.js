@@ -15,6 +15,11 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+		karma: {
+			unit: {
+				configFile: 'karma.conf.js'
+			}
+		},
 		nodeunit: {
 			options: {
 				reporter: 'verbose'
@@ -26,7 +31,9 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-nodeunit'); 
 	grunt.loadNpmTasks('grunt-contrib-sass'); 
 	grunt.loadNpmTasks('grunt-contrib-watch'); 
+	grunt.loadNpmTasks('grunt-karma'); 
 
-	grunt.registerTask('test', ['nodeunit']); 
+	grunt.registerTask('test-server', ['nodeunit']); 
+	grunt.registerTask('test-client', ['karma']); 
 	grunt.registerTask('default', ['watch']); 
 };
