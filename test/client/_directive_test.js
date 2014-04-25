@@ -19,6 +19,11 @@ describe('Hello World', function() { // define a test suite, or a group of specs
 		it('should add a class of plain', function() {
 			expect(element.hasClass('plain')).toBe(true); 
 		});
+
+		it('should respond to a click', function() {
+			browserTrigger(element, 'click');
+			expect($scope.clicked).toBe(true); 
+		}); 
 	}); 	
 }); 
 

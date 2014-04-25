@@ -20,6 +20,7 @@
     "grunt-contrib-sass": "^0.7.3",
     "karma-chrome-launcher": "^0.1.3",
     "karma-jasmine": "^0.1.5",
-    "grunt-karma": "^0.8.2"
+    "grunt-karma": "^0.8.2",
+    "karma-ng-scenario": "^0.1.0"
   }
 }
