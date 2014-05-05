@@ -25,7 +25,7 @@ exports.getRetrievesPosts = function(test) {
 		test.ok(body.length, 'Get request to /posts returns a list of length > 0'); 
 		test.ok(body[0].title, 'First object returned by /posts has a property title'); 
 		test.done(); 
-	}); 
+	});
 };
 
 exports.getWithQueryRetrievesPosts = function(test) {
@@ -34,16 +34,15 @@ exports.getWithQueryRetrievesPosts = function(test) {
 		qs: {
 			title: 'Post created using post request'
 		},
-		json: {} // this is required to accept the response as JSON
+		json: {} // t`his is required to accept the response as JSON
 	}, function(err, res, body) {
+		console.log(res); 
 		if (err) return console.error(err);
-		if (typeof body === 'array') {
-			test.ok(body.length, 'Get request to /posts with query string returns a list of length > 0'); 
-		} else {
-			test.ok(Object.keys(body).length, 'Get request to /posts with query string returns a list of length > 0'); 
-		}
+		test.ok(body.length, 'Get request to /posts with query string returns a list of length > 0'); 
 		test.ok(body[0].title, 'First object returned by /posts with query string has a property title'); 
-		test.equal(body[0].title, 'Post created using post request', 'Get w/ query by title returns correct post'); 
+		body.forEach(function(e) {
+			test.ok(e.title, 'Post created using post request', 'All posts have correct title'); 
+		});  
 		test.done(); 
 	}); 
 };
@@ -90,7 +89,6 @@ exports.deleteRemovesPosts = function(test) {
 		}
 	}, function(err, res, body) {
 		if (err) return console.error(err); 
-		// delete the post we just created
 		request({
 			url: 'http://localhost:1337/posts', 
 			method: 'DELETE',

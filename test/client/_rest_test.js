@@ -1,0 +1,1 @@
+describe('Posts REST API');

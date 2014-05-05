@@ -27,11 +27,10 @@ As a goal, this application will provide basic blogging functionality using the 
 ##User stories
 
 These are discrete goals that an end-user would recognize as a new feature or update.
- * Using pre-populated sample data, render a blog home page with x number of posts
- 	* Set up back end REST API to deliver mongodb data to the front end
- 	- Get angular to read the data
- 	- Use angular to populate a front page
- - Set up a user and permissions system to log into a backend
+ * Set up a user and permissions system to log into a backend
+   * Create a user schema and API
+   - Configure a passport authentication strategy to allow login via username + password
+   -
  - Allow accessing a backend to create new posts
  - Allow backend access to see older posts and edit them
  - Allow backend access to delete old posts
@@ -39,8 +38,8 @@ These are discrete goals that an end-user would recognize as a new feature or up
 
 ##Programming tasks
 
- - Create update post task 
- - Figure out how to set a default URL for the posts OR figure out if we don't even need to save a URL with a post... can just query the DB based on URL and permalink settings later 
+ - Create update post task
+ - Figure out how to set a default URL for the posts OR figure out if we don't even need to save a URL with a post... can just query the DB based on URL and permalink settings later
 
 
 ##Blog post data structure

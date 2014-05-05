@@ -25,12 +25,31 @@ module.exports = function(grunt) {
 				reporter: 'verbose'
 			},
 			server: ['test/server/*.js']
+		},
+		jshint: {
+			client: [
+				'client/**/**/*.js', 
+				'client/**/*.js',
+				'client/*.js'
+			],
+			server: [
+				'app.js', 
+				'server/*.js', 
+				'server/models/*.js'
+			],
+			clientTests: [
+				'test/client/*.js'
+			],
+			serverTests: [
+				'test/server/*.js'
+			]
 		}
 	}); 
 
 	grunt.loadNpmTasks('grunt-contrib-nodeunit'); 
 	grunt.loadNpmTasks('grunt-contrib-sass'); 
 	grunt.loadNpmTasks('grunt-contrib-watch'); 
+	grunt.loadNpmTasks('grunt-contrib-jshint'); 
 	grunt.loadNpmTasks('grunt-karma'); 
 
 	grunt.registerTask('test-server', ['nodeunit']); 

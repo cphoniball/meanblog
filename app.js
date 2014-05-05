@@ -1,9 +1,13 @@
 var express = require('express'); // node js middleware
 var bodyParser = require('body-parser');
-var cors = require('cors'); 
+var cors = require('cors');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+
 var mongoose = require('mongoose'); // mongodb driver
-var program = require('commander'); // command line options and utils
-// var handlebars = require('express3-handlebars'); - I don't think I need this with express now 
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+// var handlebars = require('express3-handlebars'); - I don't think I need this with express now
 
 var app = express();
 
@@ -16,6 +20,10 @@ app.set('DB_CONNECTION_URL', 'mongodb://localhost/meanblog');
 // application middleware
 app.use(bodyParser());
 app.use(cors()); // enable all cross-domain requests
+app.use(cookieParser('optional secret string here'));
+app.use(session({ secret: 'keyboard cat' , key: 'sid' })); // in production should use cookie: { secure: true }, but this require a https-enabled website
+app.use(passport.initialize());
+app.use(passport.session());
 
 // view engine/templating
 app.set('view engine', 'html');
@@ -34,26 +42,52 @@ app.use('/img', express.static(__dirname + '/client/assets/img'));
 app.use('/packages', express.static(__dirname + '/packages'));
 app.use('/controllers', express.static(__dirname + '/client/controllers'));
 
-// basic view routing
-app.get('/', function(req, res) {
-	res.sendfile(__dirname + '/client/views/index.html'); 
-});
-
 // setting up DB connection
 mongoose.connect(app.get('DB_CONNECTION_URL'));
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
- 
-var post = require('./server/models/posts'); 
+
+var postApi = require('./server/api/post_api.js');
+var userApi = require('./server/api/user_api.js');
+
+// passport configuration
+// passport.use(new LocalStrategy(
+// 	function(username, password, done) {
+// 		User.findOne({ username: username }, function(err, user) {
+// 			if (err) {
+// 				return done(err);
+// 			} else if (!user) {
+// 				return done(null, false, { message: "We don't have records of anyone with that username." });
+// 			} else if (!user.validPassword(password)) { // need to write this method apparently
+// 				return done(null, false, { message: "Incorrect password." });
+// 			} else {
+// 				return done(null, user); // this is equivalent to validating the request, or returning "true" for password/username match
+// 			}
+// 		});
+// 	}
+// ));
+
+// basic view routing
+app.get('/', function(req, res) {
+	res.sendfile(__dirname + '/client/views/index.html');
+});
+
+// app.get('/login', function(req, res) {
+// 	res.sendfile(__dirname + '/client/views/index.html');
+// });
+
+// app.post('/login', passport.authenticate('some method here'), function(req, res) {
+
+// });
 
 // REST api routing
-app.get('/posts', post.get);
-app.post('/posts', post.create);
-app.put('/posts', post.update); 
-app.delete('/posts', post.delete); 
-app.delete('/posts/:id', post.deleteById);
+app.get('/posts', postApi.get);
+app.post('/posts', postApi.create);
+app.put('/posts', postApi.update);
+app.delete('/posts', postApi.delete);
+app.delete('/posts/:id', postApi.deleteById);
 
 app.listen(app.get('PORT'), function() {
-	console.log('listening on port ' + app.get('PORT')); 
-});	
- 
+	console.log('listening on port ' + app.get('PORT'));
+});
+
