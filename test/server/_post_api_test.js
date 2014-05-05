@@ -36,7 +36,6 @@ exports.getWithQueryRetrievesPosts = function(test) {
 		},
 		json: {} // t`his is required to accept the response as JSON
 	}, function(err, res, body) {
-		console.log(res); 
 		if (err) return console.error(err);
 		test.ok(body.length, 'Get request to /posts with query string returns a list of length > 0'); 
 		test.ok(body[0].title, 'First object returned by /posts with query string has a property title'); 
@@ -71,7 +70,8 @@ exports.putUpdatesPosts = function(test) {
 			}
 		}, function(err, res, body) {
 			if (err) return console.error(err); 
-			test.equal(body.title, 'Update temp post', 'Updated post returns correct title.'); 
+			console.log(body); 
+			test.equal(body[0].title, 'Update temp post', 'Updated post returns correct title.'); 
 			test.done(); 
 		}); 
 	}); 

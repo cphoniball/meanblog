@@ -33,14 +33,20 @@ exports.create = function(req, res) {
 // Update a post
 exports.update = function(req, res) {
 	if (_.isPlainObject(req.body) && !_.isEmpty(req.body)) {
-		Post.findOneAndUpdate(req.body.conditions, req.body.update, function(err, doc) {
-			if (err) return console.error(err);
-			res.send(doc);
-		});
+		Post.find(req.conditions, function(err, docs) {
+			Post.update(req.body.conditions, req.body.update, function(err, numUpdated, raw) {
+				if (err) return res.status(500).send('Internal database error');
+				res.send(docs);
+			});	
+		}); 
+		
 	} else {
-		res.status(500).send('No params passed to PUT /posts');
+		res.status(400).send('No params passed to PUT /posts');
 	}
 };
+
+// TODO: Should expose an update by method here
+
 
 // Delete a post by arbitrary JSON included in the body of the request
 exports.delete = function(req, res) {
@@ -52,7 +58,7 @@ exports.delete = function(req, res) {
 			});
 		});
 	} else {
-		res.status(500).send('No parameters passed to DELETE /posts');
+		res.status(400).send('No parameters passed to DELETE /posts');
 	}
 };
 
