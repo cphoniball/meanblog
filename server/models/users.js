@@ -1,8 +1,12 @@
+/* globals require, module */ 
+
+'use strict'; 
+
 var mongoose = require('mongoose'),
 	bcrypt = require('bcrypt'), 
 	SALT_WORK_FACTOR = 10; 
 
-var userSchema = mongoose.Schema({
+var userSchema = new mongoose.Schema({
 	username: { type: String, required: true, unique: true, index: true },
 	password: { type: String, required: true },
 	joined: { type: Date, default: Date.now },
@@ -14,6 +18,12 @@ var userSchema = mongoose.Schema({
 });
 
 // add methods, static, virtuals, etc. to userSchema here
+
+// remove spaces, invalid characters from username
+// userSchema.pre('save', function(next) {
+// 	// code here
+// 	next(); 
+// }); 
 
 // Hash password with bcrypt before save
 userSchema.pre('save', function(next) {
