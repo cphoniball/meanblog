@@ -47,9 +47,6 @@ mongoose.connect(app.get('DB_CONNECTION_URL'));
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
-var postApi = require('./server/api/post_api.js');
-var userApi = require('./server/api/user_api.js');
-
 // passport configuration
 // passport.use(new LocalStrategy(
 // 	function(username, password, done) {
@@ -80,14 +77,23 @@ app.get('/', function(req, res) {
 
 // });
 
-// REST api routing
+// blog post API routing
+var postApi = require('./server/api/post_api.js');
+
 app.get('/posts', postApi.get);
 app.post('/posts', postApi.create);
 app.put('/posts', postApi.update);
 app.delete('/posts', postApi.delete);
 app.delete('/posts/:id', postApi.deleteById);
 
+// user API routing	
+var userApi = require('./server/api/user_api.js');
+
+app.get('/users', userApi.get);
+app.post('/users', userApi.create);
+app.put('/users', userApi.update);
+app.delete('/users', userApi.delete);
+
 app.listen(app.get('PORT'), function() {
 	console.log('listening on port ' + app.get('PORT'));
 });
-

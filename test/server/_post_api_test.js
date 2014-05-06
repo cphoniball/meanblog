@@ -1,9 +1,10 @@
-var request = require('request'); 
+var request = require('request'), 
+	ENDPOINT = require('../../config').BLOGURL + '/posts'; 
 
 exports.postCreatesPost = function(test) {
 	var postTitle = 'Post created using post request';
 	request({
-		url: 'http://localhost:1337/posts',
+		url: ENDPOINT,
 		method: 'POST',
 		json: {
 			title: postTitle,
@@ -12,7 +13,7 @@ exports.postCreatesPost = function(test) {
 		}
 	}, function(err, res, body) {
 			if (err) return console.error(err);
-			test.equal(res.statusCode, 200, 'POST request to http://localhost:1337/posts returns status 200.');
+			test.equal(res.statusCode, 200, 'POST request to ' + ENDPOINT +  ' returns status 200.');
 			test.equal(body.title, postTitle, 'POST request returns post object');
 			test.done();
 		}
@@ -20,7 +21,7 @@ exports.postCreatesPost = function(test) {
 }
 
 exports.getRetrievesPosts = function(test) {
-	request({ url: 'http://localhost:1337/posts', json: {} }, function(err, res, body) {
+	request({ url: ENDPOINT, json: {} }, function(err, res, body) {
 		if (err) return console.error(err); 
 		test.ok(body.length, 'Get request to /posts returns a list of length > 0'); 
 		test.ok(body[0].title, 'First object returned by /posts has a property title'); 
@@ -30,7 +31,7 @@ exports.getRetrievesPosts = function(test) {
 
 exports.getWithQueryRetrievesPosts = function(test) {
 	request({
-		url: 'http://localhost:1337/posts', 
+		url: ENDPOINT, 
 		qs: {
 			title: 'Post created using post request'
 		},
@@ -49,7 +50,7 @@ exports.getWithQueryRetrievesPosts = function(test) {
 exports.putUpdatesPosts = function(test) {
 	// create temp post 
 	request({
-		url: 'http://localhost:1337/posts', 
+		url: ENDPOINT, 
 		method: 'POST', 
 		json: {
 			title: 'Temp post', 
@@ -58,7 +59,7 @@ exports.putUpdatesPosts = function(test) {
 	}, function(err, res, body) {
 		if (err) return console.error(err); 
 		request({
-			url: 'http://localhost:1337/posts', 
+			url: ENDPOINT, 
 			method: 'PUT', 
 			json: {
 				conditions: {
@@ -80,7 +81,7 @@ exports.putUpdatesPosts = function(test) {
 exports.deleteRemovesPosts = function(test) {
 	// Create a post to be deleted
 	request({
-		url: 'http://localhost:1337/posts/',
+		url: ENDPOINT,
 		method: 'POST', 
 		json: {
 			title: 'Temp', 
@@ -90,7 +91,7 @@ exports.deleteRemovesPosts = function(test) {
 	}, function(err, res, body) {
 		if (err) return console.error(err); 
 		request({
-			url: 'http://localhost:1337/posts', 
+			url: ENDPOINT, 
 			method: 'DELETE',
 			json: {
 				title: 'Temp'
@@ -106,7 +107,7 @@ exports.deleteRemovesPosts = function(test) {
 // this should run only after all the other tests have run
 exports.deleteByIDRemovesPosts = function(test) {
 	request({
-		url: 'http://localhost:1337/posts',
+		url: ENDPOINT,
 		qs: {
 			title: 'Post created using post request'
 		},
@@ -115,7 +116,7 @@ exports.deleteByIDRemovesPosts = function(test) {
 		if (err) return console.error(err);
 		var id = body[0]._id; 
 		request({
-			url: 'http://localhost:1337/posts/' + id, 
+			url: ENDPOINT' + id, 
 			method: 'DELETE', 
 			json: {}
 		}, function(err, res, body) {

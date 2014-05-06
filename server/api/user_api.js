@@ -1,10 +1,14 @@
-var User = require('../models/users.js').
+/* globals require, exports */ 
+
+'use strict'; 
+
+var User = require('../models/users.js'),
 	_ = require('lodash');
 
 // TODO: need to figure out where to set up authentication middleware here
 var handleError = function(err, res) {
 	return res.send(500, { error: 'Internal database error ' + err }); 
-}
+};
 
 exports.get = function(req, res) {
 	if (_.isPlainObject(req.query) && !_.isEmpty(req.query)) {
@@ -34,14 +38,14 @@ exports.create = function(req, res) {
 };
 
 // 
-exports.update = function() {
+exports.update = function(req, res) {
 	if (_.isPlainObject(req.body) && !_.isEmpty(req.body)) { 
 		User.update(req.body.conditions, req.body.update, function(err, users) {
 			if (err) res.status(500).send('Internal database error');
 			res.send(users); 
 		}); 
 	} else {
-		res.status(400).send('Conditions or update params left out of PUT to /users');; 
+		res.status(400).send('Conditions or update params left out of PUT to /users');
 	}
 };
 
