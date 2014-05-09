@@ -71,7 +71,6 @@ exports.putUpdatesPosts = function(test) {
 			}
 		}, function(err, res, body) {
 			if (err) return console.error(err); 
-			console.log(body); 
 			test.equal(body[0].title, 'Update temp post', 'Updated post returns correct title.'); 
 			test.done(); 
 		}); 
@@ -116,7 +115,7 @@ exports.deleteByIDRemovesPosts = function(test) {
 		if (err) return console.error(err);
 		var id = body[0]._id; 
 		request({
-			url: ENDPOINT' + id, 
+			url: ENDPOINT + '/' + id, 
 			method: 'DELETE', 
 			json: {}
 		}, function(err, res, body) {
