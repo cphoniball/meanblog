@@ -90,43 +90,72 @@ module.exports = {
 	},
 
 	putUpdatesUser: function(test) {
-		var tom = new User({
-			username: 'tom', 
-			password: 'something'
-		}); 
+		User.remove({ username: 'tom' }, function(err) {
+			if (err) return console.error(err); 
+			var tom = new User({
+				username: 'tom', 
+				password: 'something'
+			}); 
 
-		tom.save(function(err) {
+			tom.save(function(err) {
+				if (err) return console.error(err); 
+				request({
+					url: ENDPOINT, 
+					method: 'PUT', 
+					json: {
+						conditions: {
+							username: 'tom' 
+						},
+						update: {
+							meta: {
+								fullname: 'Tom Lastname', 
+								website: 'http://example.com'
+							}
+						}
+					}
+				}, function(err, res, body) {
+					if (err) return console.error(err); 
+					console.log(body); 
+					console.log(res.statusCode); 
+					test.ok(body[0].meta.fullname, 'Tom Lastname', 'PUT request returns user to response'); 
+					User.findOne({ username: 'tom' }, function(err, user) {
+						if (err) return console.error(err); 
+						test.ok(user.username, 'tom', 'Updated user returns same username'); 
+						test.ok(user.meta.fullname, 'Tom Lastname', 'Updated user returns updated full name'); 
+						user.remove(function(err) {
+							if (err) return console.error(err); 
+							test.done(); 
+						}); 
+					}); 
+				}); 		
+			}); 
+		}); 
+	}, 
+
+	deleteRemovesUser: function(test) {
+		var ohnoes = new User({
+			username: 'ohnoes', 
+			password: 'idontwannadie'
+		});
+
+		ohnoes.save(function(err) {
 			if (err) return console.error(err); 
 			request({
 				url: ENDPOINT, 
-				method: 'PUT', 
+				method: 'DELETE', 
 				json: {
-					conditions: {
-						username: 'tom' 
-					},
-					update: {
-						meta: {
-							fullname: 'Tom Lastname', 
-							website: 'http://example.com'
-						}
-					}
+					username: 'ohnoes'
 				}
-			}, function(err) {
-				if (err) return console.error(err); 
-				User.findOne({ username: 'tom' }, function(err, user) {
+			}, function(err, res, body) {
+				User.find({ username: 'ohnoes' }, function(err, docs) {
 					if (err) return console.error(err); 
-					test.ok(user.username, 'tom', 'Updated user returns same username'); 
-					test.ok(user.meta.fullname, 'Tom Lastname', 'Updated user returns updated full name'); 
-					user.remove(function(err) {
-						if (err) return console.error(err); 
-						test.done(); 
-					}); 
+					test.equal(docs.length, 0, 'No documents returned by Mongoose query after delete'); 
+					test.equal(body[0].username, 'ohnoes', 'Document retuned to requester on DELETE to /users'); 
+					test.done(); 
 				}); 
-			}); 		
+				
+			}); 
 		}); 
-		
 	}
-
-	// test other CRUD functionality down here
 
 };

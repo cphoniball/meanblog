@@ -33,8 +33,8 @@ exports.create = function(req, res) {
 // Update a post
 exports.update = function(req, res) {
 	if (_.isPlainObject(req.body) && !_.isEmpty(req.body)) {
-		Post.find(req.conditions, function(err, docs) {
-			Post.update(req.body.conditions, req.body.update, function(err, numUpdated, raw) {
+		Post.update(req.body.conditions, req.body.update, function(err, numUpdated, raw) {
+			Post.find(req.body.update, function(err, docs) {	
 				if (err) return res.status(500).send('Internal database error');
 				res.send(docs);
 			});	

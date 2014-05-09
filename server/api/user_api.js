@@ -40,9 +40,12 @@ exports.create = function(req, res) {
 // 
 exports.update = function(req, res) {
 	if (_.isPlainObject(req.body) && !_.isEmpty(req.body)) { 
-		User.update(req.body.conditions, req.body.update, function(err, users) {
+		User.update(req.body.conditions, req.body.update, req.body.options || { multi: true }, function(err, numAffected, raw) {
 			if (err) res.status(500).send('Internal database error');
-			res.send(users); 
+			User.find(req.body.conditions, function(err, users) {
+				if (err) res.status(500).send('Internal database error');
+				res.send(users); 
+			}); 
 		}); 
 	} else {
 		res.status(400).send('Conditions or update params left out of PUT to /users');

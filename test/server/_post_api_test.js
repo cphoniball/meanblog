@@ -73,7 +73,7 @@ exports.putUpdatesPosts = function(test) {
 			if (err) return console.error(err); 
 			test.equal(body[0].title, 'Update temp post', 'Updated post returns correct title.'); 
 			test.done(); 
-		}); 
+		});
 	}); 
 }; 
 
